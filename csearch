@@ -1,0 +1,39 @@
+#!/bin/bash
+ARGVAL=$1
+unameOut="$(uname -s)"
+
+case "${unameOut}" in
+	Linux*)	machine=Linux;;
+	Darwin*) machine=Mac;;
+	*) echo "Script not currently supported for this OS."
+		exit 1;;
+esac
+
+if [ "$#" -eq "0" ] #Check if arg is empty. If so, get user input.
+	then
+	echo -e "Enter Table name: \c "
+	read ARGVAL
+fi
+
+firstChar=${ARGVAL:0:1} #Get first letter of ARGVAL.
+
+#Launch URL depending on which letter ARGVAL starts with.
+#If Mac, use open command. If Linux, use xdg-open.
+case $firstChar in
+	B) url="https://api.census.gov/data/2020/acs/acs5/groups/$ARGVAL.html"
+	if [ $machine = "Mac" ];
+	then open $url
+	else xdg-open $url
+	fi ;;
+	S) url="https://api.census.gov/data/2020/acs/acs5/subject/groups/$ARGVAL.html"
+	if [ $machine = "Mac" ];
+	then open $url
+	else xdg-open $url
+	fi ;;
+	D) url="https://api.census.gov/data/2020/acs/acs5/profile/groups/$ARGVAL.html"
+	if [ $machine = "Mac" ];
+	then open $url
+	else xdg-open $url
+	fi ;;
+	*) echo "Not supported. Table name must begin with B, D, or S.";;
+esac
